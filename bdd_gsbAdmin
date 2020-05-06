@@ -1,0 +1,324 @@
+USE [master]
+GO
+/****** Object:  Database [gsb]    Script Date: 06/05/2020 16:24:02 ******/
+CREATE DATABASE [gsb]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'gsb', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\gsb.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'gsb_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\gsb_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+GO
+ALTER DATABASE [gsb] SET COMPATIBILITY_LEVEL = 140
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [gsb].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [gsb] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [gsb] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [gsb] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [gsb] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [gsb] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [gsb] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [gsb] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [gsb] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [gsb] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [gsb] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [gsb] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [gsb] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [gsb] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [gsb] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [gsb] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [gsb] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [gsb] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [gsb] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [gsb] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [gsb] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [gsb] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [gsb] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [gsb] SET RECOVERY FULL 
+GO
+ALTER DATABASE [gsb] SET  MULTI_USER 
+GO
+ALTER DATABASE [gsb] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [gsb] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [gsb] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [gsb] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [gsb] SET DELAYED_DURABILITY = DISABLED 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'gsb', N'ON'
+GO
+ALTER DATABASE [gsb] SET QUERY_STORE = OFF
+GO
+USE [gsb]
+GO
+/****** Object:  User [test]    Script Date: 06/05/2020 16:24:02 ******/
+CREATE USER [test] FOR LOGIN [test] WITH DEFAULT_SCHEMA=[dbo]
+GO
+ALTER ROLE [db_owner] ADD MEMBER [test]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [test]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [test]
+GO
+/****** Object:  Table [dbo].[Comptable]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Comptable](
+	[IdC] [int] NOT NULL,
+	[nbFicheRefusee] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Comptable] PRIMARY KEY CLUSTERED 
+(
+	[IdC] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Utilisateur]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Utilisateur](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nom] [nvarchar](50) NOT NULL,
+	[Prenom] [nvarchar](50) NOT NULL,
+	[Login] [nvarchar](50) NOT NULL,
+	[Adresse] [nvarchar](50) NOT NULL,
+	[CP] [nvarchar](50) NOT NULL,
+	[Ville] [nvarchar](50) NOT NULL,
+	[DateEmbauche] [date] NOT NULL,
+	[mdp] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Utilisateur] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Utiliser]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Utiliser](
+	[idVisiteur] [nvarchar](50) NOT NULL,
+	[Immat] [nvarchar](50) NOT NULL,
+	[DateDebut] [date] NOT NULL,
+	[DateFin] [date] NOT NULL,
+ CONSTRAINT [PK_Utiliser] PRIMARY KEY CLUSTERED 
+(
+	[idVisiteur] ASC,
+	[Immat] ASC,
+	[DateDebut] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Vehicule]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Vehicule](
+	[Immat] [nvarchar](50) NOT NULL,
+	[Puissance] [nvarchar](50) NOT NULL,
+	[ModeleEtMarque] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Vehicule] PRIMARY KEY CLUSTERED 
+(
+	[Immat] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Visiteur]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Visiteur](
+	[idVisiteur] [int] NOT NULL,
+ CONSTRAINT [PK_Visiteur] PRIMARY KEY CLUSTERED 
+(
+	[idVisiteur] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[Comptable] ([IdC], [nbFicheRefusee]) VALUES (1, N'0')
+GO
+INSERT [dbo].[Comptable] ([IdC], [nbFicheRefusee]) VALUES (2, N'0')
+GO
+INSERT [dbo].[Comptable] ([IdC], [nbFicheRefusee]) VALUES (27, N'0')
+GO
+INSERT [dbo].[Comptable] ([IdC], [nbFicheRefusee]) VALUES (28, N'0')
+GO
+INSERT [dbo].[Comptable] ([IdC], [nbFicheRefusee]) VALUES (42, N'0')
+GO
+SET IDENTITY_INSERT [dbo].[Utilisateur] ON 
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (1, N'De', N'Pascal', N'p', N'12 rue', N'797460', N'Saint paul', CAST(N'1995-09-01' AS Date), N'uMvpKy/TM2P/zLPUApWwGQ==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (2, N'Villechalane', N'Louis', N'lvillachane', N'8 rue des charmes', N'46000', N'Cahors', CAST(N'2005-12-21' AS Date), N'jVgg1kzpERaWv/x82+osqQ==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (3, N'Andre', N'David', N'dandre', N'1 rue Petit', N'46200', N'Lalbenque', CAST(N'1998-11-23' AS Date), N'jVgg1kzpERZk0BgTWpeRdQ==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (4, N'De', N'Philippe', N'pde', N'13 rue Barthes', N'94000', N'Créteil', CAST(N'2010-12-14' AS Date), N'cxBD68LfTsWqkyM1tIohAw==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (5, N'Enault-Pascreau', N'Céline', N'cenault', N'25 place de la gare', N'23200', N'La souteraine', CAST(N'1995-09-01' AS Date), N'c9zWBVUJ6UM=')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (27, N'jason', N'jason', N'j1', N'14 rue coco', N'97460', N'Saint Paul', CAST(N'2000-05-05' AS Date), N'jVgg1kzpERZk0BgTWpeRdQ==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (28, N'jason', N'jason', N'j2', N'14 rue port', N'97460', N'Saint Paul', CAST(N'2000-05-05' AS Date), N'SOO1Tp6rkvHC6pKWrr5YFw==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (39, N'Fanguimache', N'jessy', N'azerty', N'12 rue coco', N'97450', N'SAint benoit', CAST(N'2019-12-13' AS Date), N'e567v5KIvGJd49sX/jd4lA==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (40, N'azer', N'azer', N'azer', N'azer', N'13245', N'azer', CAST(N'2019-12-05' AS Date), N'jVgg1kzpERZk0BgTWpeRdQ==')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (41, N'aza', N'az', N'az', N'az', N'47477', N'az', CAST(N'2019-12-05' AS Date), N'o0aMLwxAElY=')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (42, N'azer', N'raze', N'raze', N'rezz', N'13458', N'eze', CAST(N'2019-12-13' AS Date), N'XftkMa8uL5X951EqpZnNVQm2hD25jeWK')
+GO
+INSERT [dbo].[Utilisateur] ([Id], [Nom], [Prenom], [Login], [Adresse], [CP], [Ville], [DateEmbauche], [mdp]) VALUES (43, N'David', N'Eric', N'de', N'2 rue du commerce', N'97402', N'Saint mafata', CAST(N'2020-04-18' AS Date), N'uMvpKy/TM2NyW8R5jkRBYN1Lqah9xg14')
+GO
+SET IDENTITY_INSERT [dbo].[Utilisateur] OFF
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'1', N'DD-456-DD', CAST(N'2019-11-12' AS Date), CAST(N'2019-11-12' AS Date))
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'1', N'DD-456-DD', CAST(N'2020-01-04' AS Date), CAST(N'2019-11-12' AS Date))
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'39', N'CC-358-YD', CAST(N'2019-12-04' AS Date), CAST(N'2020-02-04' AS Date))
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'39', N'CC-358-YD', CAST(N'2020-02-05' AS Date), CAST(N'2020-02-06' AS Date))
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'40', N'BB-321-BB', CAST(N'2019-12-05' AS Date), CAST(N'2019-12-06' AS Date))
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'41', N'AA-123-AA', CAST(N'2019-12-05' AS Date), CAST(N'2019-12-06' AS Date))
+GO
+INSERT [dbo].[Utiliser] ([idVisiteur], [Immat], [DateDebut], [DateFin]) VALUES (N'43', N'BB-321-BB', CAST(N'2020-04-19' AS Date), CAST(N'2020-04-20' AS Date))
+GO
+INSERT [dbo].[Vehicule] ([Immat], [Puissance], [ModeleEtMarque]) VALUES (N'AA-123-AA', N'4 ', N'Quatrelle Renault')
+GO
+INSERT [dbo].[Vehicule] ([Immat], [Puissance], [ModeleEtMarque]) VALUES (N'BB-321-BB', N'90', N'190 E Mercedes')
+GO
+INSERT [dbo].[Vehicule] ([Immat], [Puissance], [ModeleEtMarque]) VALUES (N'CC-358-YD', N'83', N'Fiesta Mk 1 Ford')
+GO
+INSERT [dbo].[Vehicule] ([Immat], [Puissance], [ModeleEtMarque]) VALUES (N'DD-456-DD', N'26', N'126 Fiat')
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (3)
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (4)
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (5)
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (39)
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (40)
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (41)
+GO
+INSERT [dbo].[Visiteur] ([idVisiteur]) VALUES (43)
+GO
+ALTER TABLE [dbo].[Comptable]  WITH CHECK ADD  CONSTRAINT [FK_Comptable_Utilisateur] FOREIGN KEY([IdC])
+REFERENCES [dbo].[Utilisateur] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Comptable] CHECK CONSTRAINT [FK_Comptable_Utilisateur]
+GO
+ALTER TABLE [dbo].[Visiteur]  WITH CHECK ADD  CONSTRAINT [FK_Visiteur_Utilisateur] FOREIGN KEY([idVisiteur])
+REFERENCES [dbo].[Utilisateur] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Visiteur] CHECK CONSTRAINT [FK_Visiteur_Utilisateur]
+GO
+/****** Object:  StoredProcedure [dbo].[testSiVoitureDispo]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROC [dbo].[testSiVoitureDispo] @immat varchar(10), @dateDebut date
+As
+BEGIN
+
+Declare @dateFin varchar(30)
+Set @dateFin = (Select FORMAT(DATEADD(day,1,MAX(DateFin)),'dd MMMM yyyy') AS dateFin from Utiliser where Utiliser.Immat=@immat and dateFin > @dateDebut GROUP BY Utiliser.Immat)
+
+--on test si la voiture est disponible
+if exists (Select Vehicule.*
+			from Vehicule 
+			Where (exists(Select * from Utiliser Where Utiliser.Immat=@immat))
+			and (Exists(Select MAX(DateFin) as dateFin from Utiliser where Utiliser.Immat=@immat and dateFin >@dateDebut GROUP BY Utiliser.Immat)))
+begin
+--Voiture non dispo
+Raiserror(N'Cette voiture ne sera disponible qu''à partir du %s',16,1,@dateFin);
+end
+END
+GO
+/****** Object:  StoredProcedure [dbo].[testUserExist]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROC [dbo].[testUserExist] @nom nvarchar(100), @prenom nvarchar(100)
+AS
+If EXISTS (Select * from Utilisateur where Nom = @nom and Prenom = @prenom)
+begin
+RAISERROR ('User existant', 1,1)
+SELECT Adresse,CP,Ville FROM Utilisateur where Nom=@nom and Prenom=@prenom;
+end
+ELSE
+return
+
+GO
+/****** Object:  Trigger [dbo].[modif_mdp]    Script Date: 06/05/2020 16:24:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TRIGGER [dbo].[modif_mdp] 
+ON [dbo].[Utilisateur]
+AFTER UPDATE
+AS
+DECLARE @id	int
+SET @id =(SELECT Id from inserted)
+
+IF EXISTS(SELECT * FROM Utilisateur WHERE Id = @id)
+Return 
+ELSE
+begin
+ROLLBACK
+RAISERROR('Modification impossible', 16,1)
+end
+GO
+ALTER TABLE [dbo].[Utilisateur] ENABLE TRIGGER [modif_mdp]
+GO
+USE [master]
+GO
+ALTER DATABASE [gsb] SET  READ_WRITE 
+GO
